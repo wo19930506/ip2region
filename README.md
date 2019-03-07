@@ -18,14 +18,17 @@ ip2region - 最自由的ip地址查询库，ip到地区的映射库，提供Bina
 
 ### 4. 多查询客户端的支持，0.0x毫秒级别的查询
 
-已经集成的客户端有：java, php, c, python，nodejs，php扩展(支持linux, php5, php7版本已支持)，golang。
+已经集成的客户端有：java、C#、php、c、python、nodejs、php扩展(php5和php7)、golang、rust、lua、lua_c。
 
     提供了两种查询算法，响应时间如下：
     客户端/binary算法/b-tree算法/Memory算法：
+    c#/0.x毫秒/0.x毫秒/0.x毫秒
     java/0.x毫秒/0.x毫秒/0.1x毫秒 (使用RandomAccessFile)
     php/0.x毫秒/0.1x毫秒/0.1x毫秒
     c/0.0x毫秒/0.0x毫秒/0.00x毫秒(b-tree算法基本稳定在0.02x毫秒级别)
     python/0.x毫秒/0.1x毫秒/未知
+    lua/0.x毫秒/0.x毫秒/0.x毫秒
+    lua_c/0.0x毫秒/0.0x毫秒/0.00x毫秒
 
 任何客户端b-tree都比binary算法快，当然Memory算法固然是最快的！
 
@@ -34,11 +37,17 @@ maven仓库地址：
 <dependency>
     <groupId>org.lionsoul</groupId>
     <artifactId>ip2region</artifactId>
-    <version>1.4</version>
+    <version>1.7.2</version>
 </dependency>
+```
+nuget安装命令
+```shell
+Install-Package IP2Region
 ```
 
 ### 5. 测试程序：
+C#、Node.js、lua_c的测试请具体参考文件夹中README.md 说明。
+
 java: 
 ```shell
 cd binding/java
@@ -61,6 +70,12 @@ gcc -g -O2 testSearcher.c ip2region.c
 python: 
 ```shell
 python binding/python/testSearcher.py ./data/ip2region.db
+```
+
+lua: 
+```shell
+cd binding/lua/
+lua testSearcher.lua ../../data/ip2region.db
 ```
 
 均会看到如下界面：
@@ -105,3 +120,9 @@ java -jar dbMaker-1.2.2.jar -src ./data/ip.merge.txt -region ./data/global_regio
 ```
 
 * 5, 数据库文件的结构和原理请阅读 @冬芽 的blog：[“ip2region数据库文件的结构和原理”](http://dongyado.com/tool/2016/08/18/structure-of-ip2region-database-file/)
+
+
+### 7. 其他备注
+* 1, 全部binding的各个search接口都<b>不是</b>线程安全的实现，不同线程可以通过创建不同的查询对象来使用。
+* 2, memorySearch接口，在发布对象前进行一次预查询，可以安全用于多线程环境。
+* 3, ip2region交流分享，微信：lionsoul2014，QQ：1187582057
